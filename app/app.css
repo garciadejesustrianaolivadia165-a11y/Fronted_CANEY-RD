@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* Tipografía del dashboard (diseño Figma del panel) */
+  --font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* ===== PALETA OFICIAL BANEY ===== */
+
+  /* P. Neutral (textos, fondos, separadores) — ancla real: 900 */
+  --color-neutral-50: #f4f5f3;
+  --color-neutral-100: #e7e9e5;
+  --color-neutral-200: #d3d6d0;
+  --color-neutral-300: #bdc1b9;
+  --color-neutral-400: #a2a79e;
+  --color-neutral-500: #878c83;
+  --color-neutral-600: #696e64;
+  --color-neutral-700: #4d5148;
+  --color-neutral-800: #343730;
+  --color-neutral-900: #20221f; /* confirmado en Figma */
+
+  /* P. Primaria (verde — CTA, enlaces, marketplace) — anclas reales: 400 y 600 */
+  --color-primary-50: #e8efe3;
+  --color-primary-100: #cfdec5;
+  --color-primary-200: #afc79f;
+  --color-primary-300: #86a371;
+  --color-primary-400: #5d7f4d; /* confirmado en Figma */
+  --color-primary-500: #486440;
+  --color-primary-600: #364a2d; /* confirmado en Figma */
+  --color-primary-700: #2a3a23;
+  --color-primary-800: #1e2a19;
+  --color-primary-900: #131b10;
+
+  /* P. Secundaria (beige/arena — fondos suaves) */
+  --color-secondary-50: #fdf8f0;
+  --color-secondary-100: #faefde;
+  --color-secondary-200: #f6e3c7;
+  --color-secondary-300: #f1d5ac;
+  --color-secondary-400: #ebc793;
+  --color-secondary-500: #e3b678;
+  --color-secondary-600: #ce9a55;
+  --color-secondary-700: #b98443;
+  --color-secondary-800: #9c6d34;
+  --color-secondary-900: #7a5326;
+
+  /* P. Secundaria 02 (marrón) — ancla real: 300 */
+  --color-secondary2-50: #f5ede0;
+  --color-secondary2-100: #e9d8bd;
+  --color-secondary2-200: #cdaf86;
+  --color-secondary2-300: #b1864e; /* confirmado en Figma */
+  --color-secondary2-400: #9a713f;
+  --color-secondary2-500: #825c32;
+  --color-secondary2-600: #6b4926;
+  --color-secondary2-700: #54371b;
+  --color-secondary2-800: #3d2712;
+  --color-secondary2-900: #281809;
+
+  /* P. Secundaria 03 (naranja) */
+  --color-secondary3-50: #fff1e6;
+  --color-secondary3-100: #ffdcc2;
+  --color-secondary3-200: #ffc49a;
+  --color-secondary3-300: #ffa96f;
+  --color-secondary3-400: #ff8f47;
+  --color-secondary3-500: #f76b15;
+  --color-secondary3-600: #d95710;
+  --color-secondary3-700: #b4460b;
+  --color-secondary3-800: #8c3508;
+  --color-secondary3-900: #4c1c04;
+
+  /* P. Secundaria 04 (verde lima — subtítulos) — anclas reales: 100, 200, 400, 500 */
+  --color-secondary4-50: #eff3d3;
+  --color-secondary4-100: #dee5a5; /* confirmado en Figma */
+  --color-secondary4-200: #ced878; /* confirmado en Figma */
+  --color-secondary4-300: #b6c154;
+  --color-secondary4-400: #9eaa31; /* confirmado en Figma */
+  --color-secondary4-500: #747d24; /* confirmado en Figma */
+  --color-secondary4-600: #5c641d;
+  --color-secondary4-700: #454b16;
+  --color-secondary4-800: #2e320f;
+  --color-secondary4-900: #1a1c08;
+
+  /* P. Positivo (estados completos/exitosos) */
+  --color-success-50: #ecfdf5;
+  --color-success-100: #d1fae5;
+  --color-success-200: #a7f3d0;
+  --color-success-300: #6ee7b7;
+  --color-success-400: #34d399;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+  --color-success-700: #047857;
+  --color-success-800: #065f46;
+  --color-success-900: #064e3b;
+
+  /* P. Advertencia — 700 confirmado en Figma */
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-200: #fde68a;
+  --color-warning-300: #fcd34d;
+  --color-warning-400: #fbbf24;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309; /* confirmado en Figma */
+  --color-warning-800: #92400e;
+  --color-warning-900: #78350f;
+
+  /* P. Error */
+  --color-error-50: #fef2f2;
+  --color-error-100: #fee2e2;
+  --color-error-200: #fecaca;
+  --color-error-300: #fca5a5;
+  --color-error-400: #f87171;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  --color-error-700: #b91c1c;
+  --color-error-800: #991b1b;
+  --color-error-900: #7f1d1d;
+
+  /* Modo oscuro */
+  --color-dark-50: #363e49;
+  --color-dark-100: #343b46;
+  --color-dark-200: #323945;
+  --color-dark-300: #2f3742;
+  --color-dark-400: #2a323e;
+  --color-dark-500: #262e3a;
+  --color-dark-600: #232b37;
+  --color-dark-700: #212935;
+  --color-dark-800: #1c2531;
+  --color-dark-900: #101926;
+
+  /* Fondo de la pantalla de carga (splash) */
+  --color-caney-dark: #2e320e;
+
+  /* Cielo azul del panel del login (matriz de colores del logo) */
+  --color-caney-sky: #63b3ff;
+}
+
+html,
+body {
+  @apply bg-white dark:bg-gray-950;
+
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
+}
+
+/* El autorrelleno de Chrome pinta los inputs de azul-gris y aclara el texto;
+   esto lo fuerza a usar los colores del design system */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--color-neutral-100) inset;
+  -webkit-text-fill-color: var(--color-neutral-900);
+  caret-color: var(--color-neutral-900);
+}
