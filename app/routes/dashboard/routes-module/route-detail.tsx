@@ -41,7 +41,7 @@ export default function RouteDetail() {
           />
 
           {/* Chip de destino */}
-          <div className="pointer-events-none absolute left-8 top-1/4 flex items-center gap-3 rounded-full bg-white py-2 pl-2 pr-6 shadow-md">
+          <div className="pointer-events-none absolute right-6 top-6 flex items-center gap-3 rounded-full bg-white py-2 pl-2 pr-6 shadow-md">
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-600 text-white">
               <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
                 <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" />
@@ -77,7 +77,7 @@ export default function RouteDetail() {
                 src="/images/image_rutas/liner.png"
                 alt=""
                 aria-hidden
-                className="absolute left-7 h-11 w-auto drop-shadow-md"
+                className="absolute left-6 h-14 w-auto drop-shadow-md"
               />
             </div>
 
@@ -108,7 +108,7 @@ export default function RouteDetail() {
                   aria-hidden
                   className="h-10 w-10 shrink-0"
                 />
-                <div className="flex-1 rounded-full border border-neutral-300 px-5 py-3 text-center text-sm font-semibold text-primary-600">
+                <div className="flex-1 whitespace-nowrap rounded-full border border-neutral-300 px-3 py-3 text-center text-sm font-semibold text-primary-600">
                   Av. 27 de feb, Santo Domingo
                 </div>
               </div>

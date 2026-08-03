@@ -33,15 +33,9 @@ export default function AuthLayout() {
               className="absolute left-5 top-4 flex items-center gap-2"
             >
               <img
-                src="/logos/Logotipo_BANEY_SVG.svg"
-                alt=""
-                aria-hidden
-                className="h-9 w-auto"
-              />
-              <img
-                src="/logos/Baney_logo_png.png"
+                src="/logos/Logo_Horizontal_baney_png.png"
                 alt="BANEY"
-                className="h-5 w-auto"
+                className="h-9 w-auto"
               />
             </Link>
           </aside>

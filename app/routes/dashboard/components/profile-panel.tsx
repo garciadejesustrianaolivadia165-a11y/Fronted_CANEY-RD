@@ -11,14 +11,18 @@ const clientes = [
   { nombre: "D' Luisa's Comedor", lugar: "Azua", img: `${IMG}/image_home_11.png` },
 ];
 
-// Barras apiladas del mini-gráfico: 4 tonos de oliva de abajo (oscuro) hacia arriba (pálido)
+// Barras apiladas del mini-gráfico: 4 tonos de oliva de abajo (oscuro) hacia arriba (pálido).
+// Una barra por día, de domingo a sábado.
 const barras = [
-  [16, 8, 6, 6],
-  [28, 12, 10, 8],
-  [34, 16, 14, 10],
-  [44, 18, 16, 12],
-  [36, 16, 12, 10],
+  [12, 6, 5, 4],
+  [20, 9, 7, 6],
+  [25, 11, 10, 7],
+  [32, 13, 12, 9],
+  [26, 12, 9, 7],
+  [22, 10, 8, 6],
+  [16, 8, 6, 5],
 ];
+const dias = ["D", "L", "M", "M", "J", "V", "S"];
 const tonos = [
   "bg-secondary4-600",
   "bg-secondary4-400",
@@ -156,11 +160,11 @@ export default function ProfilePanel() {
           <p className="text-center text-sm font-semibold text-[#415936]">
             Actividad
           </p>
-          <div className="mt-3 flex items-end justify-center gap-3">
+          <div className="mt-3 flex items-end justify-center gap-2">
             {barras.map((b, i) => (
               <div
                 key={i}
-                className="flex w-8 flex-col-reverse overflow-hidden rounded-sm"
+                className="flex w-6 flex-col-reverse overflow-hidden rounded-sm"
               >
                 {b.map((h, j) => (
                   <div key={j} className={tonos[j]} style={{ height: h }} />
@@ -168,11 +172,11 @@ export default function ProfilePanel() {
               </div>
             ))}
           </div>
-          <div className="mt-2 flex justify-center gap-3">
-            {["D", "L", "M", "M", "J"].map((dia, i) => (
+          <div className="mt-2 flex justify-center gap-2">
+            {dias.map((dia, i) => (
               <span
                 key={i}
-                className="w-8 text-center text-xs font-medium text-[#415936]"
+                className="w-6 text-center text-xs font-medium text-[#415936]"
               >
                 {dia}
               </span>

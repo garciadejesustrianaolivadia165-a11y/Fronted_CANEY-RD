@@ -91,17 +91,11 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-white/15 pt-8 md:flex-row">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center">
             <img
-              src="/logos/Logotipo_BANEY_SVG.svg"
-              alt=""
-              aria-hidden
-              className="h-10 w-auto"
-            />
-            <img
-              src="/logos/Baney_logo_png.png"
+              src="/logos/Logo_Horizontal_baney_png.png"
               alt="BANEY"
-              className="h-6 w-auto"
+              className="h-10 w-auto"
             />
           </Link>
 

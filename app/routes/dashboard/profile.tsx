@@ -28,7 +28,7 @@ function Campo({ label, value, onChange, type = "text" }: CampoProps) {
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-full border border-[#415936] bg-white px-5 py-3.5 text-[15px] text-[#415936] outline-none transition-colors placeholder:text-[#415936]/60 focus:border-primary-400 focus:ring-2 focus:ring-primary-400/30"
+        className="w-full rounded-full border border-[#9EAA31] bg-white px-5 py-3.5 text-[15px] text-[#415936] outline-none transition-colors placeholder:text-[#415936]/60 focus:border-primary-400 focus:ring-2 focus:ring-primary-400/30"
       />
     </div>
   );

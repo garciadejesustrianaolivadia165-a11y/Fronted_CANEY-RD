@@ -53,17 +53,11 @@ const proveedores = [
 export default function Sidebar() {
   return (
     <aside className="hidden w-64 shrink-0 flex-col rounded-3xl bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.10)] lg:flex">
-      <Link to="/" className="flex items-center gap-2">
+      <Link to="/" className="flex items-center">
         <img
-          src="/logos/Logotipo_BANEY_SVG.svg"
-          alt=""
-          aria-hidden
-          className="h-10 w-auto"
-        />
-        <img
-          src="/logos/Baney_logo_png.png"
+          src="/logos/Logo_Horizontal_baney_png.png"
           alt="BANEY"
-          className="h-6 w-auto"
+          className="h-11 w-auto"
         />
       </Link>
 

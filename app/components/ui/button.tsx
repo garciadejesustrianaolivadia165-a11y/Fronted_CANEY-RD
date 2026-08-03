@@ -13,7 +13,7 @@ type ButtonProps = {
 // hover = crece + sombra; clic = invierte colores
 const variants = {
   primary:
-    "bg-primary-600 text-secondary-50 hover:bg-primary-500 active:bg-white active:text-primary-800 active:ring-2 active:ring-primary-800",
+    "bg-primary-600 text-secondary-50 hover:bg-primary-500 active:bg-transparent active:text-primary-800 active:ring-2 active:ring-primary-800",
   outline:
     "border-2 border-primary-500 text-primary-600 bg-white/70 hover:bg-primary-50 active:bg-primary-600 active:text-white active:border-primary-600",
   soft: "bg-white/40 text-neutral-900 backdrop-blur-sm hover:bg-white/60 active:bg-primary-600 active:text-white",

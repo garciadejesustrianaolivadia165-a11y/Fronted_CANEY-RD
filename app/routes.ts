@@ -29,6 +29,7 @@ export default [
       route("bandeja/pedidos/:id", "routes/dashboard/inbox/order-detail.tsx"),
       route("finanzas", "routes/dashboard/finances/index.tsx"),
       route("finanzas/indicadores", "routes/dashboard/finances/indicators.tsx"),
+      route("finanzas/economicos", "routes/dashboard/finances/economic-indicators.tsx"),
       route("productos", "routes/dashboard/products/index.tsx"),
       route("productos/:id/stock", "routes/dashboard/products/stock.tsx"),
       route("clientes", "routes/dashboard/clients/index.tsx"),

@@ -14,17 +14,11 @@ export default function Navbar({ session = false }: { session?: boolean }) {
   return (
     <header className="absolute inset-x-0 top-0 z-40">
       <nav className="flex w-full items-center justify-between gap-6 px-8 py-5 2xl:gap-8 2xl:px-16">
-        <Link to="/" className="flex shrink-0 items-center gap-2">
+        <Link to="/" className="flex shrink-0 items-center">
           <img
-            src="/logos/Logotipo_BANEY_SVG.svg"
-            alt=""
-            aria-hidden
-            className="h-10 w-auto"
-          />
-          <img
-            src="/logos/Baney_logo_png.png"
+            src="/logos/Logo_Horizontal_baney_png.png"
             alt="BANEY"
-            className="h-6 w-auto"
+            className="h-11 w-auto"
           />
         </Link>
 
