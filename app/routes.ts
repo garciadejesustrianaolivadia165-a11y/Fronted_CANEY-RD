@@ -3,6 +3,7 @@ import { type RouteConfig, index, route, layout, prefix } from "@react-router/de
 export default [
   index("routes/home.tsx"),                          // 02 - Home (vista por defecto)
   route("landing", "routes/landing.tsx"),            // 00 - Landing (home sin login)
+  route("mobile", "routes/mobile.tsx"),              // Vista preliminar móvil (Fase 1)
 
   layout("routes/auth/layout.tsx", [                 // 01 - Autenticación
     route("login", "routes/auth/login.tsx"),
@@ -30,6 +31,8 @@ export default [
       route("finanzas", "routes/dashboard/finances/index.tsx"),
       route("finanzas/indicadores", "routes/dashboard/finances/indicators.tsx"),
       route("finanzas/economicos", "routes/dashboard/finances/economic-indicators.tsx"),
+      route("finanzas/economicos/resumen", "routes/dashboard/finances/order-summary.tsx"),
+      route("finanzas/productos", "routes/dashboard/finances/product-indicators.tsx"),
       route("productos", "routes/dashboard/products/index.tsx"),
       route("productos/:id/stock", "routes/dashboard/products/stock.tsx"),
       route("clientes", "routes/dashboard/clients/index.tsx"),

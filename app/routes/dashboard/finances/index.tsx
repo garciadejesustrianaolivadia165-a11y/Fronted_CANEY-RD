@@ -247,7 +247,7 @@ export default function Finances() {
               Indicadores económicos <span aria-hidden>$</span>
             </Link>
             <Link
-              to="/dashboard/finanzas/indicadores"
+              to="/dashboard/finanzas/productos"
               className="flex items-center gap-2 rounded-2xl bg-primary-600 px-6 py-3 font-sans text-sm font-semibold text-secondary-50 transition-all duration-200 hover:scale-105 hover:bg-primary-500 hover:shadow-md active:bg-transparent active:text-primary-800 active:ring-2 active:ring-primary-800"
             >
               Indicadores Producto

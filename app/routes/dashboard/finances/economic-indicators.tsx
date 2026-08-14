@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router";
 import SearchHeader, { CalendarioFiltro } from "../components/search-header";
 import FiltroPeriodo from "../components/filtro-periodo";
 
@@ -234,12 +235,12 @@ export default function EconomicIndicators() {
                 $356,005.56
               </p>
               <p className="text-sm text-neutral-500">meta $500,000.00</p>
-              <button
-                type="button"
-                className="mt-4 rounded-2xl bg-primary-200/70 px-8 py-3 font-sans text-sm font-semibold text-primary-800 transition-all duration-200 hover:scale-105 hover:bg-primary-300 hover:shadow-md active:bg-primary-600 active:text-white"
+              <Link
+                to="/dashboard/finanzas/economicos/resumen"
+                className="mt-4 inline-block rounded-2xl bg-primary-200/70 px-8 py-3 font-sans text-sm font-semibold text-primary-800 transition-all duration-200 hover:scale-105 hover:bg-primary-300 hover:shadow-md active:bg-primary-600 active:text-white"
               >
                 Mas detalles
-              </button>
+              </Link>
             </div>
           </div>
 

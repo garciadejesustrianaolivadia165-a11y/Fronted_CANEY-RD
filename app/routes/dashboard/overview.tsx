@@ -8,19 +8,19 @@ const IMG = "/images/image_home";
 const productos = [
   {
     nombre: "Zanahorias Criollas (Lb)",
-    img: `${IMG}/image_home_04.png`,
+    img: "/images/image_inicio/image_inicio_01.png",
     stock: true,
     progreso: 55,
   },
   {
     nombre: "Pimientos Maduros (Und)",
-    img: `${IMG}/image_home_14.png`,
+    img: "/images/image_inicio/image_inicio_02.png",
     stock: true,
     progreso: 40,
   },
   {
     nombre: "Maíz Tierno (Und)",
-    img: `${IMG}/image_home_16.png`,
+    img: "/images/image_inicio/image_inicio_03.png",
     stock: false,
     progreso: 65,
   },

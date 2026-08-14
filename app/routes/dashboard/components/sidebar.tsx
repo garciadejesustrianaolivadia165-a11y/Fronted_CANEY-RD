@@ -37,6 +37,7 @@ const panelGeneral = [
   { label: "Mis productos", to: "/dashboard/productos", icon: "/images/task-square.png" },
   { label: "Clientes", to: "/dashboard/clientes", icon: "/images/people.png" },
   { label: "Rutas", to: "/dashboard/rutas", icon: "/images/people.png" },
+  { label: "Mobile", to: "/mobile", icon: "", svg: "M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM11 18h2" },
 ];
 
 const claseItem = ({ isActive }: { isActive: boolean }) =>
@@ -72,7 +73,11 @@ export default function Sidebar() {
             end={item.end}
             className={claseItem}
           >
-            <img src={item.icon} alt="" aria-hidden className="h-5 w-5" />{" "}
+            {"svg" in item && item.svg ? (
+              <Icono d={item.svg} />
+            ) : (
+              <img src={item.icon} alt="" aria-hidden className="h-5 w-5" />
+            )}{" "}
             {item.label}
           </NavLink>
         ))}

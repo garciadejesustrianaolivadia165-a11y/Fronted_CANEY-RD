@@ -1,12 +1,24 @@
 export default function GoogleButton({
   label = "Sign up with Google",
+  className = "",
+  translucido = false,
+  onClick,
 }: {
   label?: string;
+  className?: string;
+  /** Fondo semitransparente con desenfoque (versión móvil sobre la foto del campo) */
+  translucido?: boolean;
+  onClick?: () => void;
 }) {
+  const fondo = translucido
+    ? "border-white/60 bg-white/70 backdrop-blur-sm hover:bg-white/85"
+    : "border-neutral-200 bg-white hover:bg-neutral-50";
+
   return (
     <button
       type="button"
-      className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3 py-2 text-xs text-neutral-700 shadow-sm transition-colors hover:bg-neutral-50"
+      onClick={onClick}
+      className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-xs text-neutral-700 shadow-sm transition-colors ${fondo} ${className}`}
     >
       <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0">
         <path

@@ -153,3 +153,12 @@ input:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--color-neutral-900);
   caret-color: var(--color-neutral-900);
 }
+
+/* Carruseles horizontales que se desplazan pero sin barra de scroll a la vista */
+.sin-barra-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.sin-barra-scroll::-webkit-scrollbar {
+  display: none;
+}
