@@ -282,7 +282,7 @@ export default function ProductIndicators() {
         </div>
       </div>
 
-      <div className="grid items-start gap-6 xl:grid-cols-3">
+      <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-3">
         {/* Mis Productos */}
         <div className={`${sombraCard} xl:col-span-2`}>
           <div className="flex flex-wrap items-center justify-between gap-4">

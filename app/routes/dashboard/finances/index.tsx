@@ -89,7 +89,7 @@ export default function Finances() {
       <SearchHeader />
 
       {/* Tarjetas de totales */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {tarjetas.map((t) => (
           <div
             key={t.label}
@@ -111,7 +111,7 @@ export default function Finances() {
         ))}
       </div>
 
-      <div className="grid items-start gap-6 xl:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-2">
         {/* Columna izquierda */}
         <div className="space-y-6">
           {/* Ventas registradas */}

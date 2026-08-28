@@ -90,7 +90,7 @@ export default function EconomicIndicators() {
         </div>
       </div>
 
-      <div className="grid items-start gap-6 xl:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-2">
         {/* Ventas por producto */}
         <div className={sombraCard}>
           <div className="flex items-center justify-between">

@@ -90,7 +90,7 @@ export default function FinanceIndicators() {
       <SearchHeader />
 
       {/* Tarjetas de totales */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {tarjetas.map((t) => (
           <div
             key={t.label}
@@ -117,7 +117,7 @@ export default function FinanceIndicators() {
         ))}
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         {/* VENTAS: barras con tooltip */}
         <div className={sombraCard}>
           <div className="flex items-center justify-between">

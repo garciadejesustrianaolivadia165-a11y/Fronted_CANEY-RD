@@ -92,7 +92,7 @@ export default function Profile() {
         </div>
 
         {/* Información del usuario */}
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <Campo label="Nombres" value={form.nombres} onChange={set("nombres")} />
           <Campo
             label="Apellidos"
@@ -128,7 +128,7 @@ export default function Profile() {
             value={form.negocio}
             onChange={set("negocio")}
           />
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <Campo
               label="Correo Corporativo"
               type="email"
@@ -147,7 +147,7 @@ export default function Profile() {
             value={form.direccion}
             onChange={set("direccion")}
           />
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <Campo label="RNC" value={form.rnc} onChange={set("rnc")} />
             <Campo
               label="Dueño del negocio"

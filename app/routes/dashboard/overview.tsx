@@ -217,7 +217,7 @@ export default function DashboardOverview() {
 
       {/* Tarjetas de estado */}
       <section className={resaltado(1)}>
-        <div className="grid gap-6 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
           {estados.map((e, i) => (
             <div
               key={i}

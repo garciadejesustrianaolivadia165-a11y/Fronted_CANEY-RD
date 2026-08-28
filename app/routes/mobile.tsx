@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router";
 import GoogleButton from "~/components/ui/google-button";
 
@@ -303,6 +303,230 @@ function Campo({
   );
 }
 
+// ===================== MÓDULO DE SOLICITUD (ruta · carga · pago) =====================
+
+const LUGARES = [
+  "Av. Abraham Lincoln, Santo Domingo",
+  "Santo Domingo Este, Rep. Dom.",
+  "Santiago de los Caballeros",
+  "La Romana, Rep. Dom.",
+  "Punta Cana, Rep. Dom.",
+  "San Pedro de Macorís",
+  "Haina, San Cristóbal",
+  "Higüey, La Altagracia",
+  "Puerto Plata, Rep. Dom.",
+  "Baní, Peravia",
+  "San Francisco de Macorís",
+  "Bávaro, Verón",
+];
+
+const PIN = "M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z";
+
+/** Buscador de lugares con sugerencias filtradas mientras se escribe */
+function BuscadorLugar({
+  etiqueta,
+  valor,
+  onCambio,
+  placeholder,
+  icono,
+}: {
+  etiqueta: string;
+  valor: string;
+  onCambio: (v: string) => void;
+  placeholder: string;
+  icono: string;
+}) {
+  const [abierto, setAbierto] = useState(false);
+  const filtro = valor.trim().toLowerCase();
+  const sugerencias = LUGARES.filter((l) =>
+    l.toLowerCase().includes(filtro),
+  ).slice(0, 5);
+
+  return (
+    <div className="relative">
+      <label className="block text-[11px] font-bold uppercase tracking-wide text-[#9AA3AF]">
+        {etiqueta}
+      </label>
+      <div className="mt-2 flex items-center gap-3 rounded-2xl bg-[#F1F4F2] px-4 py-3.5">
+        <img src={icono} alt="" aria-hidden className="h-5 w-5 shrink-0" />
+        <input
+          value={valor}
+          placeholder={placeholder}
+          onChange={(e) => {
+            onCambio(e.target.value);
+            setAbierto(true);
+          }}
+          onFocus={() => setAbierto(true)}
+          onBlur={() => setAbierto(false)}
+          className="w-full bg-transparent text-[15px] text-[#16202E] outline-none placeholder:text-[#9AA69C]"
+        />
+        {valor !== "" && (
+          <button
+            type="button"
+            aria-label={`Borrar ${etiqueta.toLowerCase()}`}
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => onCambio("")}
+            className="shrink-0 text-[#9AA3AF] transition-colors hover:text-[#4A5720]"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden className="h-3.5 w-3.5">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        )}
+      </div>
+
+      {abierto && sugerencias.length > 0 && (
+        <ul className="absolute inset-x-0 top-full z-30 mt-2 overflow-hidden rounded-2xl border border-[#EDEFEB] bg-white shadow-[0_12px_30px_rgba(20,30,15,0.18)]">
+          {sugerencias.map((l) => (
+            <li key={l}>
+              <button
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => {
+                  onCambio(l);
+                  setAbierto(false);
+                }}
+                className="flex w-full items-center gap-3 px-4 py-3 text-left text-[14px] text-[#16202E] transition-colors hover:bg-primary-400/10"
+              >
+                <svg viewBox="0 0 24 24" fill="#8B9A3A" aria-hidden className="h-3.5 w-3.5 shrink-0">
+                  <path d={PIN} />
+                </svg>
+                {l}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/** Marcas de tarjeta que acompañan a cada medio de pago */
+function MarcasTarjeta() {
+  return (
+    <span className="flex shrink-0 items-center gap-2" aria-hidden>
+      <svg viewBox="0 0 48 30" className="h-[18px] w-auto">
+        <circle cx="19" cy="15" r="9" fill="#EB001B" />
+        <circle cx="29" cy="15" r="9" fill="#F79E1B" />
+        <path d="M24 8.4a9 9 0 0 0 0 13.2 9 9 0 0 0 0-13.2z" fill="#FF5F00" />
+      </svg>
+      <span className="text-[13px] font-bold italic tracking-tight text-[#1A1F71]">
+        VISA
+      </span>
+      <span className="rounded-[3px] bg-[#2E77BC] px-1 py-[3px] text-center text-[5px] font-bold leading-[1.1] text-white">
+        AMERICAN
+        <br />
+        EXPRESS
+      </span>
+    </span>
+  );
+}
+
+function LogoPayPal({ className = "text-[17px]" }: { className?: string }) {
+  return (
+    <span className={`font-bold italic ${className}`}>
+      <span className="text-[#003087]">Pay</span>
+      <span className="text-[#009CDE]">Pal</span>
+    </span>
+  );
+}
+
+/** Desglose "Información de pago" (mismo formato que la pasarela web) */
+function ResumenPago({ material }: { material: string }) {
+  const lineas = [
+    { t: `Transporte de ${material.toLowerCase()}`, v: "RD$ 3,800.00" },
+    { t: "Servicio de plataforma", v: "RD$ 450.00" },
+    { t: "Seguro de carga", v: "RD$ 250.00" },
+  ];
+  return (
+    <div className="mt-4 bg-[#FBF7FA] px-4 py-3">
+      {lineas.map((l) => (
+        <div key={l.t} className="flex items-center justify-between gap-4 py-2">
+          <span className="text-[13px] text-[#16202E]">{l.t}</span>
+          <span className="shrink-0 text-[13px] text-[#16202E]">{l.v}</span>
+        </div>
+      ))}
+      <div className="flex items-center justify-between border-t border-[#D8CFD4] py-2">
+        <span className="text-[13px] text-[#16202E]">Subtotal</span>
+        <span className="text-[13px] text-[#16202E]">RD$ 4,500.00</span>
+      </div>
+      <div className="flex items-center justify-between border-t border-[#D8CFD4] py-2">
+        <span className="text-[13px] font-bold text-[#16202E]">Total</span>
+        <span className="text-[13px] font-bold text-[#16202E]">RD$ 4,500.00</span>
+      </div>
+    </div>
+  );
+}
+
+function FilaDato({ k, v, fuerte }: { k: string; v: string; fuerte?: boolean }) {
+  return (
+    <div className="flex items-center justify-between gap-4 py-2">
+      <span className={`text-[14px] ${fuerte ? "font-bold text-[#16202E]" : "text-[#6B7688]"}`}>
+        {k}
+      </span>
+      <span className={`text-[14px] ${fuerte ? "font-bold" : ""} text-[#16202E]`}>
+        {v}
+      </span>
+    </div>
+  );
+}
+
+function EntradaPago({
+  placeholder,
+  tipo = "text",
+  opciones,
+}: {
+  placeholder: string;
+  tipo?: string;
+  opciones?: string[];
+}) {
+  const clases =
+    "w-full rounded-full border border-[#D6DAD2] bg-white px-5 py-3.5 text-[14px] text-[#16202E] outline-none transition-colors placeholder:text-[#9AA3AF] focus:border-secondary4-400 focus:ring-2 focus:ring-secondary4-400/30";
+  if (opciones) {
+    return (
+      <select defaultValue="" className={`${clases} appearance-none`}>
+        <option value="" disabled>
+          {placeholder}
+        </option>
+        {opciones.map((o) => (
+          <option key={o}>{o}</option>
+        ))}
+      </select>
+    );
+  }
+  return <input type={tipo} placeholder={placeholder} className={clases} />;
+}
+
+function BotonPago({
+  children,
+  onClick,
+}: {
+  children: ReactNode;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="mt-5 w-full rounded-full bg-[#4A5720] py-4 text-[15px] font-bold text-white shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg active:bg-transparent active:text-[#4A5720] active:shadow-none active:ring-2 active:ring-[#4A5720]"
+    >
+      {children}
+    </button>
+  );
+}
+
+function Casilla({ children }: { children: ReactNode }) {
+  return (
+    <label className="mt-4 flex cursor-pointer items-start gap-2.5 text-[12px] leading-relaxed text-[#6B7688]">
+      <input
+        type="checkbox"
+        className="mt-0.5 h-4 w-4 shrink-0 accent-[#4A5720]"
+      />
+      {children}
+    </label>
+  );
+}
+
 export function meta() {
   return [{ title: "BANEY Mobile | Fase 1" }];
 }
@@ -319,6 +543,35 @@ export default function Mobile() {
   const [camion, setCamion] = useState("Mack #23");
   const [horario, setHorario] = useState("Ahora mismo");
   const [tabHistorial, setTabHistorial] = useState("Completados");
+
+  // --- Módulo de solicitud: ruta (1) · carga (2) · pago (3) ---
+  const [paso, setPaso] = useState<1 | 2 | 3>(1);
+  const [origen, setOrigen] = useState("Av. Abraham Lincoln, Santo Domingo");
+  const [destino, setDestino] = useState("");
+  const [peso, setPeso] = useState("12");
+  const [unidad, setUnidad] = useState("Ton");
+  const [condiciones, setCondiciones] = useState<string[]>([]);
+  const [notas, setNotas] = useState("");
+  const [metodoPago, setMetodoPago] = useState<string | null>(null);
+
+  function alternarCondicion(c: string) {
+    setCondiciones((prev) =>
+      c === "Ninguna"
+        ? prev.includes(c)
+          ? []
+          : ["Ninguna"]
+        : prev.includes(c)
+          ? prev.filter((x) => x !== c)
+          : [...prev.filter((x) => x !== "Ninguna"), c],
+    );
+  }
+
+  // Vuelve al paso 1 cada vez que se entra a la solicitud desde el mapa
+  function abrirSolicitud() {
+    setPaso(1);
+    setMetodoPago(null);
+    setVista("solicitud");
+  }
 
   // Splash: pasa solo al onboarding
   useEffect(() => {
@@ -755,7 +1008,7 @@ export default function Mobile() {
                 </span>
                 <button
                   type="button"
-                  onClick={() => setVista("solicitud")}
+                  onClick={abrirSolicitud}
                   className="w-[72px] shrink-0 rounded-2xl bg-warning-500 px-3 py-2.5 text-center text-[15px] font-bold leading-tight text-white transition-all duration-200 hover:scale-105 hover:shadow-lg active:bg-transparent active:text-warning-500 active:shadow-none active:ring-2 active:ring-warning-500"
                 >
                   Ver ahora
@@ -779,7 +1032,7 @@ export default function Mobile() {
 
               <button
                 type="button"
-                onClick={() => setVista("solicitud")}
+                onClick={abrirSolicitud}
                 className="mt-4 flex w-full items-start gap-3.5 rounded-2xl border border-[#EDEFEB] bg-white p-4 text-left shadow-[0_4px_16px_rgba(20,30,15,0.07)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_10px_26px_rgba(20,30,15,0.14)]"
               >
                 <img
@@ -837,7 +1090,7 @@ export default function Mobile() {
               <button
                 type="button"
                 aria-label="Volver"
-                onClick={() => setVista("mapa")}
+                onClick={() => (paso === 1 ? setVista("mapa") : setPaso((p) => (p === 3 ? 2 : 1)))}
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#E3E6E0] text-[#16202E] transition-all duration-200 hover:scale-105 hover:shadow-md active:bg-[#4A5720] active:text-white"
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="h-4 w-4">
@@ -845,7 +1098,7 @@ export default function Mobile() {
                 </svg>
               </button>
               <h2 className="flex-1 pr-10 text-center text-[17px] font-bold text-[#16202E]">
-                Solicitar Transporte
+                {paso === 3 ? "Escoge tu medio de pago" : "Solicitar Transporte"}
               </h2>
             </header>
 
@@ -853,61 +1106,52 @@ export default function Mobile() {
               {/* Pasos */}
               <div className="flex items-center gap-2">
                 {[
-                  { n: 1, t: "Ruta", activo: true },
-                  { n: 2, t: "Carga", activo: false },
-                  { n: 3, t: "Pago", activo: false },
+                  { n: 1, t: "Ruta" },
+                  { n: 2, t: "Carga" },
+                  { n: 3, t: "Pago" },
                 ].map((p, i) => (
                   <div key={p.n} className="flex items-center gap-2 last:flex-none [&:not(:last-child)]:flex-1">
                     <span
                       className={`flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full text-[13px] font-bold ${
-                        p.activo ? "bg-[#4A5720] text-white" : "bg-[#F1F3F0] text-[#8A93A2]"
+                        paso >= p.n ? "bg-[#4A5720] text-white" : "bg-[#F1F3F0] text-[#8A93A2]"
                       }`}
                     >
                       {p.n}
                     </span>
                     <span
                       className={`text-[14px] ${
-                        p.activo ? "font-bold text-[#16202E]" : "text-[#8A93A2]"
+                        paso === p.n ? "font-bold text-[#16202E]" : "text-[#8A93A2]"
                       }`}
                     >
                       {p.t}
                     </span>
-                    {i < 2 && <span className="h-px flex-1 bg-[#E3E6E0]" />}
+                    {i < 2 && (
+                      <span
+                        className={`h-px flex-1 ${paso > p.n ? "bg-[#4A5720]" : "bg-[#E3E6E0]"}`}
+                      />
+                    )}
                   </div>
                 ))}
               </div>
 
-              {/* Ruta */}
-              <div className="rounded-2xl border border-[#EDEFEB] bg-white px-5 py-5 shadow-[0_4px_16px_rgba(20,30,15,0.06)]">
-                <div className="relative flex gap-3.5">
-                  <span
-                    aria-hidden
-                    className="absolute left-[5px] top-4 h-[calc(100%-8px)] w-px bg-[#E3E6E0]"
-                  />
-                  <span className="relative mt-1 h-[11px] w-[11px] shrink-0 rounded-full border-2 border-[#8B9A3A] bg-white" />
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-[11px] font-bold uppercase tracking-wide text-[#9AA3AF]">
-                      Origen
-                    </span>
-                    <span className="mt-1 block text-[15px] text-[#16202E]">
-                      Av. Abraham Lincoln, Santo Domingo
-                    </span>
-                    <span className="mt-4 block h-px bg-[#EDEFEB]" />
-                  </span>
-                </div>
-                <div className="mt-4 flex gap-3.5">
-                  <svg viewBox="0 0 24 24" fill="#8B9A3A" aria-hidden className="mt-0.5 h-[13px] w-[13px] shrink-0">
-                    <path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" />
-                  </svg>
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-[11px] font-bold uppercase tracking-wide text-[#9AA3AF]">
-                      Destino
-                    </span>
-                    <span className="mt-1 block text-[15px] text-[#9AA3AF]">
-                      ¿Hacia dónde va la carga?
-                    </span>
-                  </span>
-                </div>
+              {paso === 1 && (
+              <>
+              {/* Ruta: origen y destino con buscador */}
+              <div className="space-y-4 rounded-2xl border border-[#EDEFEB] bg-white px-5 py-5 shadow-[0_4px_16px_rgba(20,30,15,0.06)]">
+                <BuscadorLugar
+                  etiqueta="Origen"
+                  valor={origen}
+                  onCambio={setOrigen}
+                  placeholder="¿Desde dónde sale la carga?"
+                  icono="/images/image_rutas/from_icon.png"
+                />
+                <BuscadorLugar
+                  etiqueta="Destino"
+                  valor={destino}
+                  onCambio={setDestino}
+                  placeholder="¿Hacia dónde va la carga?"
+                  icono="/images/image_rutas/where_icon.png"
+                />
               </div>
 
               {/* Tipo de carga */}
@@ -1013,21 +1257,308 @@ export default function Mobile() {
                   })}
                 </div>
               </div>
+              </>
+              )}
+
+              {/* ---------- PASO 2: CARGA ---------- */}
+              {paso === 2 && (
+                <>
+                  <div>
+                    <h3 className="text-[17px] font-bold text-[#16202E]">
+                      ¿Cuánto pesa la carga?
+                    </h3>
+                    <div className="mt-4 flex items-center gap-3 rounded-2xl bg-[#F1F4F2] px-5 py-4">
+                      <input
+                        inputMode="decimal"
+                        value={peso}
+                        onChange={(e) => setPeso(e.target.value.replace(/[^\d.]/g, ""))}
+                        placeholder="0"
+                        className="w-full bg-transparent text-[22px] font-bold text-[#16202E] outline-none placeholder:font-normal placeholder:text-[#9AA69C]"
+                      />
+                      <span className="shrink-0 text-[15px] font-semibold text-[#8A93A2]">
+                        {unidad}
+                      </span>
+                    </div>
+                    <div className="mt-3 grid grid-cols-4 gap-3">
+                      {["lb", "kg", "Ton", "m³"].map((u) => {
+                        const activo = unidad === u;
+                        return (
+                          <button
+                            key={u}
+                            type="button"
+                            onClick={() => setUnidad(u)}
+                            className={`rounded-xl border-2 py-2.5 text-[14px] font-semibold transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
+                              activo
+                                ? "border-secondary4-400 bg-secondary4-50 text-[#3F4A20]"
+                                : "border-[#EDEFEB] bg-white text-[#5D6B84] shadow-[0_4px_14px_rgba(20,30,15,0.06)]"
+                            }`}
+                          >
+                            {u}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-[17px] font-bold text-[#16202E]">
+                      ¿Requiere condiciones especiales?
+                    </h3>
+                    <p className="mt-1.5 text-[13px] text-[#6B7688]">
+                      Marca todo lo que aplique para asignarte el camión correcto.
+                    </p>
+                    <div className="mt-4 space-y-3">
+                      {[
+                        {
+                          c: "Material delicado o frágil",
+                          d: "Requiere sujeción y manejo cuidadoso",
+                          i: "M12 2l9 5v6c0 5-3.8 8.4-9 9-5.2-.6-9-4-9-9V7l9-5z",
+                        },
+                        {
+                          c: "Comestible o perecedero",
+                          d: "Transporte apto para alimentos",
+                          i: "M7 3v8a3 3 0 0 0 6 0V3M10 11v10M17 3c-1.5 2-2 4-2 6h4c0-2-.5-4-2-6zM17 9v12",
+                        },
+                        {
+                          c: "Refrigeración",
+                          d: "Necesita cadena de frío durante el viaje",
+                          i: "M12 2v20M4 7l16 10M20 7L4 17M12 2l-3 3M12 2l3 3M12 22l-3-3M12 22l3-3",
+                        },
+                        {
+                          c: "Material peligroso",
+                          d: "Químicos, inflamables o corrosivos",
+                          i: "M12 3l9.5 16.5H2.5L12 3zM12 10v4M12 17h.01",
+                        },
+                        {
+                          c: "Ninguna",
+                          d: "Carga estándar, sin requisitos extra",
+                          i: "M20 6L9 17l-5-5",
+                        },
+                      ].map((o) => {
+                        const activo = condiciones.includes(o.c);
+                        return (
+                          <button
+                            key={o.c}
+                            type="button"
+                            onClick={() => alternarCondicion(o.c)}
+                            className={`flex w-full items-center gap-3.5 rounded-2xl border-2 px-4 py-4 text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
+                              activo
+                                ? "border-secondary4-400 bg-secondary4-50"
+                                : "border-[#EDEFEB] bg-white shadow-[0_4px_14px_rgba(20,30,15,0.06)]"
+                            }`}
+                          >
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke={activo ? "#3F4A20" : "#5D6B84"}
+                              strokeWidth="1.7"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              aria-hidden
+                              className="h-6 w-6 shrink-0"
+                            >
+                              <path d={o.i} />
+                            </svg>
+                            <span className="min-w-0 flex-1">
+                              <span className="block text-[15px] font-bold leading-tight text-[#16202E]">
+                                {o.c}
+                              </span>
+                              <span className="mt-1 block text-[12px] text-[#6B7688]">
+                                {o.d}
+                              </span>
+                            </span>
+                            <span
+                              className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 ${
+                                activo
+                                  ? "border-secondary4-400 bg-[#4A5720]"
+                                  : "border-[#D6DAD2] bg-white"
+                              }`}
+                            >
+                              {activo && (
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="h-3 w-3">
+                                  <path d="M5 13l4.5 4.5L19 7" />
+                                </svg>
+                              )}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-[17px] font-bold text-[#16202E]">
+                      Detalles adicionales
+                    </h3>
+                    <textarea
+                      rows={4}
+                      value={notas}
+                      onChange={(e) => setNotas(e.target.value)}
+                      placeholder="Ej: 40 sacos paletizados, se descargan con montacargas."
+                      className="mt-4 w-full resize-none rounded-2xl bg-[#F1F4F2] px-5 py-4 text-[15px] text-[#16202E] outline-none placeholder:text-[#9AA69C] focus:ring-2 focus:ring-secondary4-400"
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* ---------- PASO 3: PAGO ---------- */}
+              {paso === 3 && (
+                <div className="space-y-4">
+                  {[
+                    { id: "debito", titulo: "Debito", sub: "****6789" },
+                    { id: "credito", titulo: "Crédito", sub: "****6789" },
+                    { id: "nueva", titulo: "Agregar Tarjeta Debito/Crédito", sub: "****6789" },
+                    { id: "paypal", titulo: "PayPal", sub: "" },
+                  ].map((m) => {
+                    const abierto = metodoPago === m.id;
+                    return (
+                      <div key={m.id}>
+                        <button
+                          type="button"
+                          onClick={() => setMetodoPago(abierto ? null : m.id)}
+                          aria-expanded={abierto}
+                          className={`flex w-full items-center justify-between gap-3 rounded-2xl px-5 py-4 text-left transition-all duration-200 hover:scale-[1.02] hover:shadow-md ${
+                            abierto ? "bg-[#E6EAE0] ring-2 ring-[#8B9A3A]" : "bg-[#EFEFEF]"
+                          }`}
+                        >
+                          {m.id === "paypal" ? (
+                            <LogoPayPal />
+                          ) : (
+                            <span className="min-w-0">
+                              <span className="block text-[14px] font-bold text-[#16202E]">
+                                {m.titulo}
+                              </span>
+                              <span className="block text-[14px] font-bold text-[#16202E]">
+                                {m.sub}
+                              </span>
+                            </span>
+                          )}
+                          {m.id !== "paypal" && <MarcasTarjeta />}
+                        </button>
+
+                        {abierto && (
+                          <div className="mt-4 rounded-2xl border border-[#EDEFEB] bg-white px-5 py-5 shadow-[0_6px_20px_rgba(20,30,15,0.09)]">
+                            {(m.id === "debito" || m.id === "credito") && (
+                              <>
+                                <h3 className="text-[20px] font-bold text-[#16202E]">
+                                  Medio de pago
+                                </h3>
+                                <p className="mt-2 text-[16px] text-[#16202E]">
+                                  {m.id === "debito" ? "Tarjeta Débito" : "Tarjeta Crédito"}
+                                </p>
+                                <div className="mt-4">
+                                  <FilaDato k="Nombre del titular" v="Juan Pérez" />
+                                  <FilaDato k="Número de tarjeta" v="**** 6789" />
+                                  <FilaDato k="Fecha de vencimiento" v="12/23" />
+                                  {m.id === "credito" && <FilaDato k="Cuotas" v="1" />}
+                                  <FilaDato k="Total" v="RD$ 4,500.00" fuerte />
+                                </div>
+                                <div className="mt-4">
+                                  <MarcasTarjeta />
+                                </div>
+                                <h3 className="mt-6 text-[20px] font-bold text-[#16202E]">
+                                  Información de pago
+                                </h3>
+                                <ResumenPago material={material} />
+                                <BotonPago onClick={() => setVista("confirmada")}>
+                                  Continuar
+                                </BotonPago>
+                              </>
+                            )}
+
+                            {m.id === "nueva" && (
+                              <>
+                                <h3 className="text-[20px] font-bold text-[#16202E]">
+                                  Completa la información
+                                </h3>
+                                <div className="mt-4 space-y-3">
+                                  <EntradaPago placeholder="Nombre del titular" />
+                                  <EntradaPago placeholder="Número de tarjeta" />
+                                  <div className="grid grid-cols-2 gap-3">
+                                    <EntradaPago placeholder="CVC/CVV" />
+                                    <EntradaPago placeholder="Fecha de Vencimiento" />
+                                  </div>
+                                </div>
+                                <Casilla>
+                                  Guardar esta tarjeta de forma segura para mi compra posterior
+                                </Casilla>
+                                <BotonPago onClick={() => setVista("confirmada")}>
+                                  Continuar
+                                </BotonPago>
+                              </>
+                            )}
+
+                            {m.id === "paypal" && (
+                              <>
+                                <h3 className="text-[20px] font-bold text-[#16202E]">
+                                  Medio de pago
+                                </h3>
+                                <div className="mt-4">
+                                  <LogoPayPal className="text-[34px]" />
+                                </div>
+                                <h3 className="mt-6 text-[20px] font-bold text-[#16202E]">
+                                  Información de pago
+                                </h3>
+                                <ResumenPago material={material} />
+                                <h3 className="mt-6 text-[20px] font-bold text-[#16202E]">
+                                  Completa la información
+                                </h3>
+                                <div className="mt-4 space-y-3">
+                                  <EntradaPago placeholder="Nombre del titular" />
+                                  <EntradaPago
+                                    placeholder="Tipo de identificación"
+                                    opciones={["Cédula", "Pasaporte", "RNC"]}
+                                  />
+                                  <EntradaPago placeholder="Número de identificación" />
+                                  <EntradaPago placeholder="Número de teléfono" tipo="tel" />
+                                  <EntradaPago placeholder="Correo electrónico" tipo="email" />
+                                  <EntradaPago
+                                    placeholder="Selecciona tu banco"
+                                    opciones={[
+                                      "Banco Popular Dominicano",
+                                      "Banreservas",
+                                      "BHD",
+                                      "Scotiabank",
+                                    ]}
+                                  />
+                                </div>
+                                <Casilla>
+                                  Acepto haber leído los{" "}
+                                  <span className="text-[#4A5720] underline">
+                                    términos y condiciones y políticas de privacidad
+                                  </span>{" "}
+                                  para hacer este pago
+                                </Casilla>
+                                <BotonPago onClick={() => setVista("confirmada")}>
+                                  Ir a plataforma de pago
+                                </BotonPago>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
-            <footer className="sticky bottom-0 flex items-center justify-between gap-4 border-t border-[#EDEFEB] bg-white px-5 py-5">
-              <span>
-                <span className="block text-[13px] text-[#8A93A2]">Estimado total</span>
-                <span className="block text-[22px] font-bold text-[#16202E]">RD$ 4,500</span>
-              </span>
-              <button
-                type="button"
-                onClick={() => setVista("confirmada")}
-                className="rounded-full bg-[#4A5720] px-9 py-4 text-[15px] font-bold text-white shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg active:bg-transparent active:text-[#4A5720] active:shadow-none active:ring-2 active:ring-[#4A5720]"
-              >
-                Continuar
-              </button>
-            </footer>
+            {paso < 3 && (
+              <footer className="sticky bottom-0 flex items-center justify-between gap-4 border-t border-[#EDEFEB] bg-white px-5 py-5">
+                <span>
+                  <span className="block text-[13px] text-[#8A93A2]">Estimado total</span>
+                  <span className="block text-[22px] font-bold text-[#16202E]">RD$ 4,500</span>
+                </span>
+                <button
+                  type="button"
+                  disabled={paso === 1 && destino.trim() === ""}
+                  onClick={() => setPaso((p) => (p === 1 ? 2 : 3))}
+                  className="rounded-full bg-[#4A5720] px-9 py-4 text-[15px] font-bold text-white shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg active:bg-transparent active:text-[#4A5720] active:shadow-none active:ring-2 active:ring-[#4A5720] disabled:cursor-not-allowed disabled:bg-[#D9DED2] disabled:text-[#8A93A2] disabled:shadow-none disabled:hover:scale-100"
+                >
+                  Siguiente
+                </button>
+              </footer>
+            )}
           </>
         )}
 

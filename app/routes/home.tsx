@@ -173,9 +173,9 @@ export default function Home() {
 
       <main className="flex-1 pt-24">
         {/* Hero */}
-        <section className="mx-auto grid max-w-7xl items-start gap-10 px-6 py-12 lg:grid-cols-2">
-          <div>
-            <h1 className="max-w-md text-3xl font-bold leading-snug text-secondary2-500 md:text-4xl">
+        <section className="mx-auto grid max-w-7xl items-start gap-10 px-5 py-12 sm:px-6 lg:grid-cols-2">
+          <div className="min-w-0">
+            <h1 className="max-w-md text-2xl font-bold leading-snug text-secondary2-500 sm:text-3xl md:text-4xl">
               Fortalece tus conocimientos y habilidades para hacer crecer tu
               negocio
             </h1>
@@ -187,9 +187,9 @@ export default function Home() {
             </Button>
           </div>
 
-          <div className="flex justify-center gap-8 lg:justify-end">
+          <div className="flex min-w-0 justify-center gap-4 sm:gap-8 lg:justify-end">
             {heroPersonas.map((p, i) => (
-              <figure key={p.name} className="w-60 sm:w-72">
+              <figure key={p.name} className="w-1/2 min-w-0 max-w-[288px] sm:w-60 lg:w-72">
                 <img
                   src={p.img}
                   alt={p.name}
@@ -204,13 +204,13 @@ export default function Home() {
                     src={p.img}
                     alt=""
                     aria-hidden
-                    className="h-8 w-8 rounded-full object-cover"
+                    className="h-8 w-8 shrink-0 rounded-full object-cover"
                   />
-                  <div>
-                    <p className="text-sm font-semibold text-neutral-900">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-neutral-900">
                       {p.name}
                     </p>
-                    <p className="text-xs text-neutral-500">{p.loc}</p>
+                    <p className="truncate text-xs text-neutral-500">{p.loc}</p>
                   </div>
                 </figcaption>
               </figure>
