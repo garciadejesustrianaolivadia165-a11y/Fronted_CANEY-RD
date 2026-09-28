@@ -32,6 +32,14 @@ export default function Paralaje() {
     let pendiente = 0;
 
     function actualizar() {
+      // En pantallas estrechas las secciones van apiladas: mover los elementos
+      // solo abriría huecos, así que ahí el paralaje se desactiva
+      if (window.innerWidth < 1024) {
+        for (const el of elementos) el.style.transform = "";
+        pendiente = 0;
+        return;
+      }
+
       const centroPantalla = window.scrollY + window.innerHeight / 2;
       for (const el of elementos) {
         const velocidad = Number(el.dataset.paralaje) || 0;

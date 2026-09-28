@@ -2,15 +2,29 @@ import { useEffect, useState } from "react";
 import ProductCard from "~/components/product-card";
 import type { Product } from "~/types/product";
 
-const CARD_W = 320; // w-80
+const CARD_MAX = 320; // w-80
 const GAP = 24; // gap-6
-const PASO = CARD_W + GAP;
 const CLONES = 5; // tarjetas del inicio repetidas al final para el bucle sin salto
+
+/** En pantallas estrechas la tarjeta se encoge para caber entera */
+function anchoTarjeta() {
+  if (typeof window === "undefined") return CARD_MAX;
+  return Math.min(CARD_MAX, window.innerWidth - 64);
+}
 
 export default function ProductCarousel({ items }: { items: Product[] }) {
   const [index, setIndex] = useState(0);
   const [pausado, setPausado] = useState(false);
   const [conAnimacion, setConAnimacion] = useState(true);
+  const [cardW, setCardW] = useState(anchoTarjeta);
+  const PASO = cardW + GAP;
+
+  useEffect(() => {
+    setCardW(anchoTarjeta());
+    const alRedimensionar = () => setCardW(anchoTarjeta());
+    window.addEventListener("resize", alRedimensionar);
+    return () => window.removeEventListener("resize", alRedimensionar);
+  }, []);
 
   // Avanza una tarjeta cada 3.5s; se pausa con el mouse encima
   useEffect(() => {
@@ -60,7 +74,7 @@ export default function ProductCarousel({ items }: { items: Product[] }) {
             style={{ transform: `translateX(-${index * PASO}px)` }}
           >
             {pista.map((p, i) => (
-              <div key={`${p.id}-${i}`} className="w-80 shrink-0">
+              <div key={`${p.id}-${i}`} style={{ width: cardW }} className="shrink-0">
                 <ProductCard product={p} />
               </div>
             ))}

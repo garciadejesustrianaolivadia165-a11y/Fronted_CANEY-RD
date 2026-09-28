@@ -102,18 +102,22 @@ export default function ProductDetail() {
             Guineos Criollos
           </h2>
 
-          <div className="relative mt-5 overflow-hidden rounded-2xl shadow-lg shadow-neutral-400/40">
-            <img
-              src={GALERIA[principal]}
-              alt="Guineos Criollos"
-              className="h-[280px] w-full object-cover sm:h-[360px]"
-            />
-            <div className="absolute inset-y-0 right-0 flex flex-col items-end justify-center gap-3 p-5 sm:p-8">
+          {/* En teléfono los botones van debajo de la foto para no taparla;
+              desde sm vuelven a superponerse a la derecha como en el diseño */}
+          <div className="relative mt-5">
+            <div className="overflow-hidden rounded-2xl shadow-lg shadow-neutral-400/40">
+              <img
+                src={GALERIA[principal]}
+                alt="Guineos Criollos"
+                className="h-[240px] w-full object-cover sm:h-[360px]"
+              />
+            </div>
+            <div className="mt-4 flex flex-col gap-3 sm:absolute sm:inset-y-0 sm:right-0 sm:mt-0 sm:items-end sm:justify-center sm:p-8">
               {acciones.map((a) => (
                 <Link
                   key={a.t}
                   to={a.to}
-                  className={`flex w-[230px] max-w-[60vw] items-center justify-center gap-2 whitespace-nowrap rounded-full px-5 py-2.5 text-center text-[13px] font-semibold shadow-md transition-all duration-200 hover:scale-105 sm:text-sm ${a.clases}`}
+                  className={`flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-full px-5 py-3 text-center text-sm font-semibold shadow-md transition-all duration-200 hover:scale-105 sm:w-[230px] sm:py-2.5 ${a.clases}`}
                 >
                   {a.icono}
                   {a.t}

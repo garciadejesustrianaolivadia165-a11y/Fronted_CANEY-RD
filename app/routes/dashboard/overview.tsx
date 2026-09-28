@@ -144,6 +144,18 @@ export default function DashboardOverview() {
   // Carrusel de productos
   const [idxProd, setIdxProd] = useState(0);
   const [animProd, setAnimProd] = useState(true);
+  // Cuántas tarjetas caben a la vez: 1 en teléfono, 2 en tablet, 3 en escritorio
+  const [visiblesProd, setVisiblesProd] = useState(3);
+
+  useEffect(() => {
+    const calcular = () => {
+      const a = window.innerWidth;
+      setVisiblesProd(a < 640 ? 1 : a < 1280 ? 2 : 3);
+    };
+    calcular();
+    window.addEventListener("resize", calcular);
+    return () => window.removeEventListener("resize", calcular);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(
@@ -289,7 +301,7 @@ export default function DashboardOverview() {
           <div
             className={`flex ${animProd ? "transition-transform duration-700 ease-in-out" : ""}`}
             style={{
-              width: `${(pistaProductos.length * 100) / 3}%`,
+              width: `${(pistaProductos.length * 100) / visiblesProd}%`,
               transform: `translateX(-${(idxProd * 100) / pistaProductos.length}%)`,
             }}
           >
@@ -380,7 +392,7 @@ export default function DashboardOverview() {
           </Link>
         </div>
 
-        <div className="mt-4 overflow-x-auto rounded-3xl bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.10)]">
+        <div className="mt-4 overflow-x-auto rounded-3xl bg-white p-4 shadow-[0_8px_30px_rgba(0,0,0,0.10)] sm:p-6">
           <table className="w-full min-w-[560px] text-left">
             <thead>
               <tr className="text-xs uppercase tracking-wide text-neutral-400">
@@ -414,7 +426,7 @@ export default function DashboardOverview() {
                     </Link>
                   </td>
                   <td className="py-3 transition-colors duration-200 group-hover:bg-primary-400/20">
-                    <span className="rounded-full bg-success-100 px-3 py-1 text-xs font-semibold text-success-700">
+                    <span className="inline-block whitespace-nowrap rounded-full bg-success-100 px-3 py-1 text-xs font-semibold text-success-700">
                       EN PROCESO
                     </span>
                   </td>
