@@ -33,13 +33,23 @@ El dev server se arranca con `preview_start({ name: "baney-dev" })` (configurado
 
 ## Arquitectura
 
+### Las tres zonas del producto
+
+El proyecto se divide en tres zonas; antes de crear una vista hay que saber a cuál pertenece:
+
+1. **Pre-login (público)** — lo que ve quien entra sin cuenta: `/landing`, `/login`, `/register`, `/marketplace` (catálogo de compra) y la ficha de producto. Usan `Navbar` + `Footer`.
+2. **Post-login proveedor** — todo `/dashboard/*`, bajo `dashboard/layout.tsx`. Es lo único construido hasta ahora. `/dashboard/productos` ("Mis productos") es el módulo del **proveedor**: publica, filtra y administra su propio catálogo (nombre, descripción, categoría, unidad de medida, precio, existencia, estado). No confundir con `/marketplace`, que es la vista de **compra**.
+3. **Post-login cliente** — todavía no existe. Cuando se construya, debe reutilizar el mismo armazón (`dashboard/layout.tsx`, `Sidebar`, `ProfilePanel`) cambiando los ítems del menú según el rol, no duplicando el layout.
+
+**Regla de no duplicación**: no se crea un componente para web y otro equivalente para móvil. Los módulos post-login son responsive y se acceden desde el teléfono con el mismo código: por debajo de `lg` el `Sidebar` se abre como cajón (props `abierto` / `onCerrar`) desde el botón de menú que dibuja `dashboard/layout.tsx`. La ruta `/mobile` es la **excepción deliberada**: es el prototipo de la app móvil nativa de la Fase 1 (con su módulo de transporte), no una copia responsive del dashboard.
+
 ### Rutas
 
 `app/routes.ts` define TODAS las rutas explícitamente (no hay file-based routing). Cada archivo bajo `app/routes/` debe estar registrado ahí. Grupos:
 
 - `/` → `routes/home.tsx` (vista por defecto: home CON sesión — hero "Fortalece tus conocimientos", carruseles, ecosistema, productos; usa `Navbar session`) y `/landing` → `routes/landing.tsx` (home SIN login: hero "Vender, mover y cumplir"; "Cerrar Sección" navega aquí)
 - `/login`, `/register` → `routes/auth/` bajo `auth/layout.tsx`
-- `/marketplace` → catálogo y `producto/:id`
+- `/marketplace` → catálogo de compra y `producto/:id`; comparten `components/catalog-header.tsx` (barra de áreas + interruptor de temporada + filtro) y los datos de `lib/productos.ts`
 - `/checkout/*` → carrito, método de pago, agregar tarjeta, confirmación
 - `/dashboard/*` → área privada del usuario/proveedor bajo `dashboard/layout.tsx` (sidebar + panel derecho): bandeja, finanzas, productos, clientes, rutas logísticas (`routes-module/` — llamado así para no chocar con el concepto de rutas del router), favoritos, pedidos, perfil, configuración
 - `/mobile` → `routes/mobile.tsx`, prototipo móvil (ver abajo)

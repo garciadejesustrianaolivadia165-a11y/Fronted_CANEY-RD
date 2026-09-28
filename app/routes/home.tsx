@@ -5,6 +5,8 @@ import Navbar from "~/components/navbar";
 import Footer from "~/components/footer";
 import Button from "~/components/ui/button";
 import ProductCarousel from "~/components/product-carousel";
+import TextoTecleado from "~/components/texto-tecleado";
+import Paralaje from "~/components/paralaje";
 import TestimonialCarousel, {
   type Testimonio,
 } from "~/components/testimonial-carousel";
@@ -166,18 +168,19 @@ export default function Home() {
 
   return (
     <div
-      className="flex min-h-screen flex-col bg-secondary-50 bg-[length:100%_auto] bg-top bg-no-repeat"
+      className="flex min-h-screen flex-col bg-[length:100%_auto] bg-top bg-no-repeat"
       style={{ backgroundImage: "url('/images/image_home/fondo_home.png')" }}
     >
       <Navbar session />
 
       <main className="flex-1 pt-24">
+        <Paralaje />
+
         {/* Hero */}
         <section className="mx-auto grid max-w-7xl items-start gap-10 px-5 py-12 sm:px-6 lg:grid-cols-2">
-          <div className="min-w-0">
-            <h1 className="max-w-md text-2xl font-bold leading-snug text-secondary2-500 sm:text-3xl md:text-4xl">
-              Fortalece tus conocimientos y habilidades para hacer crecer tu
-              negocio
+          <div className="min-w-0" data-paralaje="0.06">
+            <h1 className="max-w-xl text-[32px] font-bold leading-[1.15] text-secondary2-500 sm:text-5xl md:text-[56px] lg:text-[60px]">
+              <TextoTecleado texto="Fortalece tus conocimientos y habilidades para hacer crecer tu negocio" />
             </h1>
             <p className="mt-6 max-w-md text-sm leading-relaxed text-neutral-700">
               {LOREM_LARGO}
@@ -189,7 +192,11 @@ export default function Home() {
 
           <div className="flex min-w-0 justify-center gap-4 sm:gap-8 lg:justify-end">
             {heroPersonas.map((p, i) => (
-              <figure key={p.name} className="w-1/2 min-w-0 max-w-[288px] sm:w-60 lg:w-72">
+              <figure
+                key={p.name}
+                data-paralaje={i === 0 ? "0.16" : "0.26"}
+                className="w-1/2 min-w-0 max-w-[288px] sm:w-60 lg:w-72"
+              >
                 <img
                   src={p.img}
                   alt={p.name}
@@ -220,11 +227,12 @@ export default function Home() {
 
         {/* Tarjetas informativas */}
         <section className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:grid-cols-3">
-          {features.map((f) => (
+          {features.map((f, i) => (
             <div key={f.title} className="text-center">
               <img
                 src={f.img}
                 alt={f.title}
+                data-paralaje={[0.1, 0.16, 0.1][i]}
                 className="w-full drop-shadow-lg"
               />
               <h3 className="mx-auto mt-7 max-w-[280px] text-2xl font-semibold leading-snug text-neutral-900">
@@ -242,6 +250,7 @@ export default function Home() {
           <img
             src={`${IMG}/titulo_home.png`}
             alt="Mas de 35,000 mil proveedores usan nuestros servicios"
+            data-paralaje="0.08"
             className="mx-auto w-full max-w-6xl px-6"
           />
 

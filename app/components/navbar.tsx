@@ -16,7 +16,7 @@ export default function Navbar({ session = false }: { session?: boolean }) {
 
   return (
     <header className="absolute inset-x-0 top-0 z-40">
-      <nav className="flex w-full items-center justify-between gap-4 px-4 py-4 sm:px-8 sm:py-5 lg:gap-6 2xl:gap-8 2xl:px-16">
+      <nav className="flex w-full items-center justify-between gap-4 px-4 py-4 sm:px-8 sm:py-5 xl:gap-6 2xl:gap-8 2xl:px-16">
         <Link to="/" className="flex shrink-0 items-center">
           <img
             src="/logos/Logo_Horizontal_baney_png.png"
@@ -26,10 +26,10 @@ export default function Navbar({ session = false }: { session?: boolean }) {
         </Link>
 
         {session && (
-          <SearchBar className="hidden w-56 shrink-0 lg:flex 2xl:w-72" />
+          <SearchBar className="hidden w-56 shrink-0 xl:flex 2xl:w-72" />
         )}
 
-        <div className="hidden items-center gap-6 lg:flex 2xl:gap-10">
+        <div className="hidden items-center gap-6 xl:flex 2xl:gap-10">
           {links.map((link) => (
             <NavLink
               key={link.label}
@@ -43,7 +43,7 @@ export default function Navbar({ session = false }: { session?: boolean }) {
 
         {/* Acciones de escritorio */}
         {session ? (
-          <div className="hidden shrink-0 items-center gap-3 lg:flex">
+          <div className="hidden shrink-0 items-center gap-3 xl:flex">
             <Button to="/landing" variant="outline" className="px-5 py-2 text-sm">
               Cerrar Sección
             </Button>
@@ -56,7 +56,7 @@ export default function Navbar({ session = false }: { session?: boolean }) {
             </Link>
           </div>
         ) : (
-          <div className="hidden shrink-0 items-center gap-3 lg:flex">
+          <div className="hidden shrink-0 items-center gap-3 xl:flex">
             <Button to="/login" className="px-5 py-2 text-sm">
               Iniciar Sección
             </Button>
@@ -67,7 +67,7 @@ export default function Navbar({ session = false }: { session?: boolean }) {
         )}
 
         {/* Menú compacto (móvil y tablet) */}
-        <div className="flex shrink-0 items-center gap-3 lg:hidden">
+        <div className="flex shrink-0 items-center gap-3 xl:hidden">
           {session && (
             <Link to="/dashboard" aria-label="Ir a tu perfil">
               <img
@@ -105,7 +105,7 @@ export default function Navbar({ session = false }: { session?: boolean }) {
 
       {/* Panel desplegable del menú compacto */}
       {menuAbierto && (
-        <div className="mx-4 rounded-3xl bg-white/95 p-5 shadow-[0_16px_45px_rgba(0,0,0,0.20)] backdrop-blur-md sm:mx-8 lg:hidden">
+        <div className="mx-4 rounded-3xl bg-white/95 p-5 shadow-[0_16px_45px_rgba(0,0,0,0.20)] backdrop-blur-md sm:mx-8 xl:hidden">
           {session && <SearchBar className="mb-4 w-full" />}
           <div className="flex flex-col">
             {links.map((link) => (

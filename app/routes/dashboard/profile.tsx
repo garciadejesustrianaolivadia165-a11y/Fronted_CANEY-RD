@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SearchHeader from "./components/search-header";
+import SubirFoto from "~/components/ui/subir-foto";
 
 const IMG = "/images/image_home";
 
@@ -39,6 +40,7 @@ export function meta() {
 }
 
 export default function Profile() {
+  const [avatar, setAvatar] = useState(`${IMG}/Ellipse 5.png`);
   const [form, setForm] = useState({
     // Información del usuario
     nombres: "Juan Rafael",
@@ -73,21 +75,43 @@ export default function Profile() {
 
       <form onSubmit={guardar} className="space-y-8">
         {/* Avatar */}
-        <div className="flex items-center gap-6">
-          <button
-            type="button"
-            aria-label="Cambiar avatar"
-            className="group shrink-0 overflow-hidden rounded-full"
-          >
-            <img
-              src={`${IMG}/Ellipse 5.png`}
-              alt="Avatar del usuario"
-              className="h-24 w-24 rounded-full object-cover transition duration-200 group-hover:scale-105 group-hover:brightness-75"
-            />
-          </button>
-          <p className="max-w-xs text-sm leading-relaxed text-neutral-400">
-            Actualiza tu avatar haciendo clic en la imagen. Tamaño recomendado:
-            288×288 px, solo en formato PNG o JPG.
+        <div className="flex flex-wrap items-center gap-6">
+          <div className="relative shrink-0">
+            {/* La propia foto es el disparador: al hacer clic se elige una nueva */}
+            <SubirFoto
+              etiqueta="Cambiar foto de perfil"
+              onFoto={setAvatar}
+              className="group"
+            >
+              <span className="relative block h-24 w-24 overflow-hidden rounded-full">
+                <img
+                  src={avatar}
+                  alt="Avatar del usuario"
+                  className="h-24 w-24 rounded-full object-cover transition duration-200 group-hover:scale-105 group-hover:brightness-75"
+                />
+                <span className="absolute inset-0 flex items-center justify-center text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="h-7 w-7">
+                    <path d="M3 8h3l2-2h8l2 2h3v12H3zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
+                  </svg>
+                </span>
+              </span>
+            </SubirFoto>
+            {avatar !== `${IMG}/Ellipse 5.png` && (
+              <button
+                type="button"
+                aria-label="Quitar la foto subida"
+                onClick={() => setAvatar(`${IMG}/Ellipse 5.png`)}
+                className="absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full bg-white text-error-500 shadow-md transition-transform hover:scale-110"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden className="h-3.5 w-3.5">
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+            )}
+          </div>
+          <p className="min-w-0 max-w-xs text-sm leading-relaxed text-neutral-400">
+            Haz clic en tu foto para subir una nueva desde tu dispositivo. Tamaño
+            recomendado: 288×288 px, en formato PNG, JPG o WEBP.
           </p>
         </div>
 

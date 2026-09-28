@@ -35,6 +35,7 @@ const panelGeneral = [
   { label: "Bandeja de entrada", to: "/dashboard/bandeja", icon: "/images/direct-inbox.png" },
   { label: "Finanzas", to: "/dashboard/finanzas", icon: "/images/folder-open.png" },
   { label: "Mis productos", to: "/dashboard/productos", icon: "/images/task-square.png" },
+  { label: "Marketplace", to: "/marketplace", icon: "/images/folder-open.png" },
   { label: "Clientes", to: "/dashboard/clientes", icon: "/images/people.png" },
   { label: "Rutas", to: "/dashboard/rutas", icon: "/images/people.png" },
   { label: "Mobile", to: "/mobile", icon: "", svg: "M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM11 18h2" },
@@ -51,10 +52,33 @@ const proveedores = [
   { id: "agromerca-rd", nombre: "AgroMerca RD", lugar: "Santo Domingo", img: `${IMG}/image_home_08.png` },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({
+  abierto = false,
+  onCerrar,
+}: {
+  /** En móvil la barra se abre como cajón desde el botón de menú */
+  abierto?: boolean;
+  onCerrar?: () => void;
+}) {
   return (
-    <aside className="hidden w-64 shrink-0 flex-col rounded-3xl bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.10)] lg:flex">
-      <Link to="/" className="flex items-center">
+    <>
+      {abierto && (
+        <button
+          type="button"
+          aria-label="Cerrar menú"
+          onClick={onCerrar}
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden"
+        />
+      )}
+
+      <aside
+        className={`${
+          abierto
+            ? "fixed inset-y-3 left-3 z-50 flex w-[17rem] overflow-y-auto"
+            : "hidden"
+        } shrink-0 flex-col rounded-3xl bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.10)] lg:static lg:z-auto lg:flex lg:w-64 lg:overflow-visible`}
+      >
+      <Link to="/" onClick={onCerrar} className="flex items-center">
         <img
           src="/logos/Logo_Horizontal_baney_png.png"
           alt="BANEY"
@@ -71,6 +95,7 @@ export default function Sidebar() {
             key={item.label}
             to={item.to}
             end={item.end}
+            onClick={onCerrar}
             className={claseItem}
           >
             {"svg" in item && item.svg ? (
@@ -112,17 +137,19 @@ export default function Sidebar() {
       <div className="mt-auto pt-10">
         <p className="text-[17px] font-bold text-[#3F443D]">CONFIGURACIÓN</p>
         <nav className="mt-5 space-y-3">
-          <NavLink to="/dashboard/configuracion" className={claseItem}>
+          <NavLink to="/dashboard/configuracion" onClick={onCerrar} className={claseItem}>
             <Icono d={iconos.config} /> Configuración
           </NavLink>
           <Link
             to="/landing"
+            onClick={onCerrar}
             className="flex items-center gap-3 px-1 py-2.5 text-[15px] font-medium text-error-500 transition-colors hover:text-error-600"
           >
             <Icono d={iconos.salir} /> Cerrar Sección
           </Link>
         </nav>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }
